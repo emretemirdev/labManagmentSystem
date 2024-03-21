@@ -44,10 +44,7 @@ public class UserController {
         return "This is USER!";
     }
 
-    @GetMapping("/testUser")
-    public String testUserAccess() {
-        return "User access confirmed!";
-    }
+
 
     @PostMapping("/generateToken")
     public String generateToken(@RequestBody AuthRequest request) {

@@ -39,10 +39,10 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers("/auth/welcome/**", "/auth/addNewUser/**", "/auth/generateToken/**").permitAll()
+                        x.requestMatchers("/auth/welcome/**","/report/all/**","/report/create/**", "/auth/addNewUser/**", "/auth/generateToken/**").permitAll()
                 )
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers("/auth/testUser","/auth/user").hasAuthority("ROLE_USER")
+                        x.requestMatchers("/auth/user").hasAuthority("ROLE_USER")
                                 .requestMatchers("/auth/admin").hasAuthority("ROLE_ADMIN")
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

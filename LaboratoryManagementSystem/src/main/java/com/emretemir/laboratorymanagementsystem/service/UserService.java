@@ -14,6 +14,7 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -29,10 +30,6 @@ public class UserService implements UserDetailsService {
         return user.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
-    public Optional<User> getByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
     public User createUser(CreateUserRequest request) {
 
         User newUser = User.builder()
@@ -45,9 +42,7 @@ public class UserService implements UserDetailsService {
                 .isEnabled(true)
                 .accountNonLocked(true)
                 .build();
-
         return userRepository.save(newUser);
     }
-
 
 }
