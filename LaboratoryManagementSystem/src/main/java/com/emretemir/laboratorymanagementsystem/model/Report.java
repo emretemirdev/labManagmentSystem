@@ -1,6 +1,7 @@
 package com.emretemir.laboratorymanagementsystem.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -30,5 +31,6 @@ public class Report {
     private byte[] reportPic;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private User user;
 }

@@ -1,5 +1,6 @@
 package com.emretemir.laboratorymanagementsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,7 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Report> reports;
 
 
