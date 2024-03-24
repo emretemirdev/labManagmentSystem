@@ -23,7 +23,7 @@ public class Report {
     private Long identifyNumber;
     @Column(name = "hTaniBasligi", length = 70, nullable = false)
     private String diagnosisTitle;
-    @Column(name = "hTaniDetayi", length = 450, nullable = false)
+    @Column(name = "hTaniDetayi", length = 200, nullable = false)
     private String diagnosisInfo;
     @Column(name = "hRaporTarihi", length = 20, nullable = false)
     private String reportDate;

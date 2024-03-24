@@ -6,9 +6,12 @@ import com.emretemir.laboratorymanagementsystem.model.User;
 import com.emretemir.laboratorymanagementsystem.service.JWTService;
 import com.emretemir.laboratorymanagementsystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,15 +48,20 @@ public class UserController {
     }
 
 
-
     @PostMapping("/generateToken")
-    public String generateToken(@RequestBody AuthRequest request) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-        if (authenticate.isAuthenticated()) {
-            return jwtService.generateToken(request.username());
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.username(), request.password())
+            );
+            User user = (User) authentication.getPrincipal();
+            String token = jwtService.generateToken(user.getUsername(), user.getId());
+            return ResponseEntity.ok(token);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        throw new UsernameNotFoundException("invalid username {} " + request.username());
     }
+
 
     @GetMapping("/admin")
     public String getAdminString() {

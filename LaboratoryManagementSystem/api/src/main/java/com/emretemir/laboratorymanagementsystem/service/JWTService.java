@@ -21,11 +21,11 @@ public class JWTService {
     @Value("${jwt.key}")
     private String SECRET;
 
-    public String generateToken(String userName) {
+    public String generateToken(String userName, Long userId) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
         return createToken(claims, userName);
     }
-
     public Boolean validateToken(String token, UserDetails userDetails) {
         String username = extractUser(token);
         Date expirationDate = extractExpiration(token);
@@ -56,7 +56,7 @@ public class JWTService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60* 60 * 2)) // 2 saat
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
