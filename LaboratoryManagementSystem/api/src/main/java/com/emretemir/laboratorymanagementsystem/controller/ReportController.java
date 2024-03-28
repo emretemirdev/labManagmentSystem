@@ -25,7 +25,6 @@ public class ReportController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-
     @DeleteMapping( "delete/{id}")
     public ResponseEntity<String> deleteReport(@PathVariable(name = "id") Long id){
         String message = reportService.deleteReport(id);

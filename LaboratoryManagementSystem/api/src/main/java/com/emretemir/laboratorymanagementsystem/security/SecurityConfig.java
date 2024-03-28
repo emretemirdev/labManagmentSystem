@@ -44,7 +44,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(x ->
                         x.requestMatchers("/auth/user").hasAuthority("ROLE_USER")
-                                .requestMatchers("/auth/admin").hasAuthority("ROLE_ADMIN")
+                                .requestMatchers("/auth/admin","/notifications").hasAuthority("ROLE_ADMIN")
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

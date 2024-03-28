@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Builder
 public record CreateUserRequest(
+        Long userId,
         String name,
         String username,
         String password,
