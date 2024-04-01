@@ -9,17 +9,14 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Popover from '@mui/material/Popover'; // Import Popover
-import { mainListItems } from '../../listItems';
+import { mainListItems } from '../../utils/listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
+import TotalReportsContainer from '../../components/containers/TotalReportContainer'
 import Reports from './Reports';
 import NotificationsDropdown from './NotificationsDropdown';
 import { useNavigate } from "react-router-dom";
@@ -201,7 +198,7 @@ export default function Dashboard() {
                       height: 240,
                     }}
                 >
-                  <Deposits />
+                  <TotalReportsContainer />
                 </Paper>
               </Grid>
               {/* Recent Reports */}

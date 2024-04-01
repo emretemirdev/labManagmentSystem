@@ -9,9 +9,7 @@ function Title(props) {
     </Typography>
   );
 }
-
 Title.propTypes = {
   children: PropTypes.node,
 };
-
 export default Title;

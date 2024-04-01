@@ -1,16 +1,16 @@
 package com.emretemir.laboratorymanagementsystem.service;
 
-import com.emretemir.laboratorymanagementsystem.dto.ReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.ReportDTO;
 import com.emretemir.laboratorymanagementsystem.model.Report;
 import com.emretemir.laboratorymanagementsystem.model.User;
 import com.emretemir.laboratorymanagementsystem.repository.ReportRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,27 +21,20 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final UserService userService;
     private final NotificationService notificationService;
-
-    private static final Logger logger = LoggerFactory.getLogger(ReportService.class);
+    private final AwsS3ReportPicService storageService;
 
 
     @Autowired
-    public ReportService(UserService userService, ReportRepository reportRepository, NotificationService notificationService) {
+    public ReportService(UserService userService, ReportRepository reportRepository, NotificationService notificationService, AwsS3ReportPicService storageService) {
         this.userService = userService;
         this.reportRepository = reportRepository;
         this.notificationService = notificationService;
+        this.storageService = storageService;
     }
-
-    // TODO
-    //  DELETE YAPIYORUM FAKAT RAPOR SİLMİYOR !
-    //   Rapor işlemini 200 döndürüyor ama dbden silinmiyor
-
 
 
     @Transactional
     public String deleteReport(Long id) {
-        logger.info("Rapor silme işlemi başlatılıyor. Rapor ID: {}", id);
-
         try {
             Report report = reportRepository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("Rapor bulunamadı, ID: " + id)
@@ -52,8 +45,6 @@ public class ReportService {
             String laborantName = user.getName();
 
             reportRepository.deleteById(id);
-            logger.info("Rapor ID: {} başarıyla silindi.", id);
-
             notificationService.createNotification(
                     "SILME",
                     id,
@@ -64,7 +55,6 @@ public class ReportService {
             );
             return "ID: " + id + " numaralı rapor başarıyla silindi.";
         } catch (Exception e) {
-            logger.error("Rapor silme işlemi sırasında bir hata oluştu: {}", e.getMessage());
             throw e;
         }
     }
@@ -77,23 +67,28 @@ public class ReportService {
     }
 
     @Transactional
-    public ReportDTO createReport(ReportDTO reportDTO) {
+    public ReportDTO createReport(ReportDTO reportDTO, MultipartFile reportPic) {
         User user = userService.findById(reportDTO.laborantId()).orElseThrow(
                 () -> new EntityNotFoundException("Kullanıcı bulunamadı, ID: " + reportDTO.laborantId())
         );
+
+        String reportPicUrl = null;
+        if (reportPic != null && !reportPic.isEmpty()) {
+            reportPicUrl = storageService.uploadFile(reportPic);
+        }
+
 
         Report report = new Report();
         report.setName(reportDTO.name());
         report.setSurName(reportDTO.surName());
         report.setIdentifyNumber(reportDTO.identifyNumber());
         report.setDiagnosisTitle(reportDTO.diagnosisTitle());
-        report.setDiagnosisInfo(reportDTO.diagnosisInfo()); // Bu alanın eksik olduğu belirlendi
+        report.setDiagnosisInfo(reportDTO.diagnosisInfo());
         report.setReportDate(reportDTO.reportDate());
-        report.setReportPic(reportDTO.reportPic());
+        report.setReportPic(reportPicUrl);
         report.setUser(user);
         report = reportRepository.save(report);
 
-        // Bildirim oluştur
         notificationService.createNotification(
                 "OLUSTURMA",
                 report.getId(),

@@ -1,4 +1,4 @@
-package com.emretemir.laboratorymanagementsystem.dto;
+package com.emretemir.laboratorymanagementsystem.dto.Report;
 
 public record ReportDTO(
         Long id,
@@ -8,7 +8,7 @@ public record ReportDTO(
         String diagnosisTitle,
         String diagnosisInfo,
         String reportDate,
-        byte[] reportPic,
+        String reportPic,
         String laborantName,
         String laborantUsername,
         Long laborantId

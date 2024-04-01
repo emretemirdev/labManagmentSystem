@@ -1,10 +1,11 @@
 package com.emretemir.laboratorymanagementsystem.controller;
 
-import com.emretemir.laboratorymanagementsystem.dto.AuthRequest;
-import com.emretemir.laboratorymanagementsystem.dto.CreateUserRequest;
+import com.emretemir.laboratorymanagementsystem.dto.Auth.AuthRequest;
+import com.emretemir.laboratorymanagementsystem.dto.Auth.CreateUserRequest;
 import com.emretemir.laboratorymanagementsystem.model.User;
 import com.emretemir.laboratorymanagementsystem.service.JWTService;
 import com.emretemir.laboratorymanagementsystem.service.UserService;
+import com.emretemir.laboratorymanagementsystem.core.constants.ApiPathConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,40 +16,36 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@SuppressWarnings("checkstyle:LineLength")
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(ApiPathConstants.USER_BASE_URL)
 @Slf4j
 public class UserController {
 
+    @SuppressWarnings("checkstyle:JavadocVariable")
     private final UserService userService;
 
+    @SuppressWarnings("checkstyle:JavadocVariable")
     private final JWTService jwtService;
 
+    @SuppressWarnings("checkstyle:JavadocVariable")
     private final AuthenticationManager authenticationManager;
 
+    @SuppressWarnings({"checkstyle:HiddenField", "checkstyle:FinalParameters", "checkstyle:MissingJavadocMethod"})
     public UserController(UserService userService, JWTService jwtService, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome to the laboratory management system";
-    }
-
-    @PostMapping("/addNewUser")
+    @SuppressWarnings({"checkstyle:FinalParameters", "checkstyle:MissingJavadocMethod", "checkstyle:DesignForExtension"})
+    @PostMapping(ApiPathConstants.ADD_NEW_USER)
     public User addUser(@RequestBody CreateUserRequest request) {
         return userService.createUser(request);
     }
 
-    @GetMapping("/user")
-    public String getUserString() {
-        return "This is USER!";
-    }
-
-
-    @PostMapping("/generateToken")
+    @SuppressWarnings({"checkstyle:LineLength", "checkstyle:FinalParameters", "checkstyle:MissingJavadocMethod", "checkstyle:DesignForExtension"})
+    @PostMapping(ApiPathConstants.GENERATE_TOKEN)
     public ResponseEntity<?> generateToken(@RequestBody AuthRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -62,12 +59,5 @@ public class UserController {
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token has expired");
         }
-    }
-
-
-
-    @GetMapping("/admin")
-    public String getAdminString() {
-        return "This is ADMIN!";
     }
 }

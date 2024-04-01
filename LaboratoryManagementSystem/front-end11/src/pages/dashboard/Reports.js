@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
-import Title from '../../Title';
+import Title from '../../utils/Title';
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
@@ -119,6 +119,9 @@ export default function Reports() {
           <DialogContentText>Tanı Bilgisi: {selectedReport.diagnosisInfo}</DialogContentText>
           <DialogContentText>Laborant Adı: {selectedReport.laborantName}</DialogContentText>
           <DialogContentText>Laborant Kullanıcı Adı: {selectedReport.laborantUsername}</DialogContentText>
+          {selectedReport.reportPic && (
+      <img src={selectedReport.reportPic} alt="Rapor Fotoğrafı" style={{ width: '100%', marginTop: '20px' }} />
+    )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDetailsClose}>Kapat</Button>

@@ -1,7 +1,7 @@
 package com.emretemir.laboratorymanagementsystem.service;
 
 
-import com.emretemir.laboratorymanagementsystem.dto.NotificationDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Notification.NotificationDTO;
 import com.emretemir.laboratorymanagementsystem.model.Notification;
 import com.emretemir.laboratorymanagementsystem.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,15 +44,18 @@ public class NotificationService {
     }
 
     private NotificationDTO convertToNotificationDTO(Notification notification) {
-        NotificationDTO dto = new NotificationDTO();
-        dto.setId(notification.getId());
-        dto.setCreatedAt(notification.getCreatedAt());
-        dto.setNotificationType(notification.getNotificationType());
-        dto.setReportId(notification.getReportId());
-        dto.setMessage(notification.getMessage());
-        dto.setLaborantId(notification.getLaborantId());
-        dto.setLaborantName(notification.getLaborantName());
-        return dto;
+
+        return new NotificationDTO(
+                notification.getId(),
+                notification.getCreatedAt(),
+                notification.getNotificationType(),
+                notification.getReportId(),
+                notification.getMessage(),
+                notification.getLaborantId(),
+                notification.getLaborantName(),
+                notification.getReportName()
+        );
     }
+
 }
 

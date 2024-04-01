@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { Container, TextField, Button, Grid, Paper, Typography } from '@mui/material';
+import { Container, TextField, Button, Grid, Paper, Typography, InputLabel, Input } from '@mui/material';
 axios.defaults.baseURL = 'http://localhost:8080';
 
 export default function ReportForm() {
@@ -13,30 +13,35 @@ export default function ReportForm() {
     diagnosisInfo: '',
     reportDate: '',
   });
+
+  const [reportPic, setReportPic] = useState(null); // Fotoğraf için state eklendi
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setReport({ ...report, [name]: value });
-  };
-
+};
+const handleFileChange = (e) => {
+  setReportPic(e.target.files[0]); // Fotoğraf dosyasını state'e ekler
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     if (token) {
-      const decoded = jwtDecode(token);
-      const userId = decoded.userId;
-      
-      const reportWithUserId = { ...report, laborantId: userId };
-      
+      const reportData = { ...report, laborantId: jwtDecode(token).userId }; // jwtDecode ile token'dan kullanıcı ID'sini alıyoruz.
+      const formData = new FormData();
+      formData.append('report', JSON.stringify(reportData));
+      if (reportPic) {
+        formData.append('reportPic', reportPic);
+      }
+
       try {
-        await axios.post('/report/create', reportWithUserId, {
+        const response = await axios.post('/report/create', formData, {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`,
           },
         });
-        setMessage('Rapor başarıyla oluşturuldu');
+
         setReport({
           name: '',
           surName: '',
@@ -45,12 +50,16 @@ export default function ReportForm() {
           diagnosisInfo: '',
           reportDate: '',
         });
+        setReportPic(null);
+        setMessage('Rapor başarıyla oluşturuldu.');
       } catch (error) {
-        setMessage('Rapor oluşturulamadı');
+        setMessage('Rapor oluşturulamadı.');
       }
+    } else {
+      setMessage('Oturum bilgisi bulunamadı.');
     }
   };
-
+  
   return (
     <Container component={Paper} elevation={3} sx={{ p: 4 }}>
       <Typography variant="h6" gutterBottom>
@@ -139,6 +148,16 @@ export default function ReportForm() {
               variant="outlined"
               value={report.reportDate}
               onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <InputLabel htmlFor="reportPic">Rapor Fotoğrafı</InputLabel>
+            <Input
+              id="reportPic"
+              name="reportPic"
+              type="file"
+              onChange={handleFileChange}
+              fullWidth
             />
           </Grid>
           <Grid item xs={12}>

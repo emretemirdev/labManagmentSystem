@@ -28,7 +28,7 @@ public class Report {
     @Column(name = "hRaporTarihi", length = 20, nullable = false)
     private String reportDate;
     @Column(name="hRaporFotografi")
-    private byte[] reportPic;
+    private String reportPic;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

@@ -1,7 +1,6 @@
 package com.emretemir.laboratorymanagementsystem.service;
 
-
-import com.emretemir.laboratorymanagementsystem.dto.CreateUserRequest;
+import com.emretemir.laboratorymanagementsystem.dto.Auth.CreateUserRequest;
 import com.emretemir.laboratorymanagementsystem.model.User;
 import com.emretemir.laboratorymanagementsystem.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,16 +28,13 @@ public class UserService implements UserDetailsService {
         Optional<User> user = userRepository.findByUsername(username);
         return user.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 
     public User createUser(CreateUserRequest request) {
-
         User newUser = User.builder()
                 .name(request.name())
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
+                .hospitalId(request.hospitalId())
                 .authorities(request.authorities())
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)

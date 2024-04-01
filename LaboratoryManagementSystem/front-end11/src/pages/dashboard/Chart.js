@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Typography, Paper } from '@mui/material';
-import Title from '../../Title';
+import Title from '../../utils/Title';
 import { LineChart } from '@mui/x-charts';
 import { axisClasses } from '@mui/x-charts';
 
