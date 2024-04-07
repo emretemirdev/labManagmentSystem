@@ -10,7 +10,7 @@ public record CreateUserRequest(
         String name,
         String username,
         String password,
-        String hospitalId,
+        Long hospitalId,
         Set<Role> authorities
 ){
 }

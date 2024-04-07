@@ -5,6 +5,8 @@ import TotalReports from '../views/TotalReports/TotalReport'
 const TotalReportsContainer = () => {
   const [totalReportsCount, setTotalReportsCount] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(''); 
+
 
   useEffect(() => {
     axios.get('/report/all')

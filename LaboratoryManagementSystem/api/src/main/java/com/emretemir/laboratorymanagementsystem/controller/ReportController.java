@@ -43,7 +43,7 @@ public class ReportController {
         return  ResponseEntity.ok(reportDTO);
     }
 
-    @PostMapping("/create")
+    @PostMapping(ApiPathConstants.CREATE_REPORT)
     public ResponseEntity<ReportDTO> createReport(
             @RequestParam("report") String reportAsJson,
             @RequestParam("reportPic") MultipartFile file) throws JsonProcessingException {

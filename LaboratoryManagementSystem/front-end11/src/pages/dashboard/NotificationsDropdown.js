@@ -1,6 +1,6 @@
 import React from 'react';
 import useNotifications from './useNotifications';
-import { List, ListItem, ListItemAvatar, ListItemText, Popover, Avatar } from '@mui/material';
+import { List, ListItem, ListItemAvatar, ListItemText, Popover, Avatar,Button, Typography,Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 import IconButton from '@mui/material/IconButton';
@@ -9,7 +9,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
 
-// Ne kadar süre önce olduğunu hesaplayan fonksiyon
 const timeSince = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
 
@@ -38,7 +37,7 @@ const timeSince = (date) => {
 };
 
 const NotificationsDropdown = ({ isAdmin }) => {
-  const { notifications, loading, error } = useNotifications();
+  const { notifications, loading, error,deleteAllNotifications  } = useNotifications();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -49,6 +48,10 @@ const NotificationsDropdown = ({ isAdmin }) => {
     setAnchorEl(null);
   };
 
+  const handleDeleteAll = () => {
+    deleteAllNotifications(); // Çağır silme işlevini
+    handleClose(); // Kapat popover
+  };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
@@ -65,8 +68,8 @@ const NotificationsDropdown = ({ isAdmin }) => {
     }
   };
 
-  // Bildirimleri en yeniden en eskiye doğru sıralayın
   const sortedNotifications = notifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
 
   return (
     <div>
@@ -80,40 +83,31 @@ const NotificationsDropdown = ({ isAdmin }) => {
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        style={{
-          marginTop: '10px',
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        PaperProps={{
+          style: {
+            maxHeight: '400px',
+            width: '300px',
+            overflow: 'auto',
+          },
         }}
       >
-        <List style={{
-          width: '300px',
-          maxWidth: '300px',
-          backgroundColor: 'white',
-          maxHeight: '400px',
-          overflow: 'auto',
-        }}>
-          {loading && <ListItem><ListItemText primary="Bildirimler Yükleniyor..." /></ListItem>}
-          {error && <ListItem><ListItemText primary={error} /></ListItem>}
-          {!loading && !error && sortedNotifications.map((notification) => (
-            <ListItem key={notification.id} alignItems="flex-start" style={{
-              borderBottom: '1px solid #f0f0f0',
-            }}>
+        <Box textAlign="center" p={2}>
+          <Button variant="contained" color="secondary" onClick={handleDeleteAll}>
+            Tüm Bildirimleri Sil
+          </Button>
+          {error && <Typography color="error">{error}</Typography>}
+        </Box>
+        <List>
+          {loading ? <ListItem><ListItemText primary="Bildirimler Yükleniyor..." /></ListItem> : sortedNotifications.map((notification) => (
+            <ListItem key={notification.id} divider>
               <ListItemAvatar>
-                <Avatar>
-                  {getIcon(notification.notificationType)}
-                </Avatar>
+                <Avatar>{getIcon(notification.notificationType)}</Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={`${notification.laborantName} tarafından adı ${notification.reportName} ve ıd'si ${notification.reportId} olan rapor ${notification.message}`}
-                secondary={timeSince(notification.createdAt)}
-                
+                primary={`${notification.laborantName} tarafından ${notification.reportName} adlı rapor`}
+                secondary={`${notification.message} - ${timeSince(notification.createdAt)}`}
               />
             </ListItem>
           ))}
@@ -122,5 +116,6 @@ const NotificationsDropdown = ({ isAdmin }) => {
     </div>
   );
 };
+
 
 export default NotificationsDropdown;

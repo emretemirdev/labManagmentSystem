@@ -33,15 +33,12 @@ export default function SignIn() {
       localStorage.setItem('token', token);
       navigate('/dashboard');
     } catch (error) {
-      let errorMessage = 'Login failed';
-      if (error.response) {
-        console.log(error.response.data);
+      let errorMessage = 'Giriş Başarısız';
+      if (error.response && error.response.status === 401) {
         errorMessage += ': ' + error.response.data.message;
       } else if (error.request) {
-        console.log(error.request);
-        errorMessage = 'No response from server';
+        errorMessage = 'Server ile bağlantı kurulamadı';
       } else {
-        console.log('Error', error.message);
         errorMessage = 'Error: ' + error.message;
       }
       setError(errorMessage);

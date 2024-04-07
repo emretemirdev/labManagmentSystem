@@ -35,6 +35,7 @@ public class ReportService {
 
     @Transactional
     public String deleteReport(Long id) {
+
         try {
             Report report = reportRepository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("Rapor bulunamadı, ID: " + id)
@@ -44,7 +45,15 @@ public class ReportService {
             );
             String laborantName = user.getName();
 
-            reportRepository.deleteById(id);
+            reportRepository.deleteReportById(id);
+
+
+            boolean stillExists = reportRepository.existsById(id);
+            if (stillExists) {
+                throw new IllegalStateException("Rapor silinemedi, ID: " + id);
+            }
+
+
             notificationService.createNotification(
                     "SILME",
                     id,

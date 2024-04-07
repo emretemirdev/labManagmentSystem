@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,69 +13,25 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems } from '../../utils/listItems';
-import Chart from './Chart';
+import { MainListItems } from '../../utils/listItems';
+import WelcomeBanner from './WelcomeBanner';
 import TotalReportsContainer from '../../components/containers/TotalReportContainer'
 import Reports from './Reports';
 import NotificationsDropdown from './NotificationsDropdown';
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import jwtDecode from 'jwt-decode';
-
-
-const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-      '& .MuiDrawer-paper': {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        boxSizing: 'border-box',
-        ...(!open && {
-          overflowX: 'hidden',
-          transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          width: theme.spacing(7),
-          [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-          },
-        }),
-      },
-    }),
-);
+import { getUserInfo } from '../../services/userService'; // Kullanıcı servisi import ediliyor
+import AppBar from '../../components/ui/AppBar';
+import Drawer from '../../components/ui/Drawer';
 
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
   const [open, setOpen] = useState(true);
-  const [anchorEl, setAnchorEl] = useState(null); // Anchor for the Popover
-  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -84,7 +39,7 @@ export default function Dashboard() {
       const decodedToken = jwtDecode(token);
       const roles = decodedToken.roles;
       const admin = roles.includes('ROLE_ADMIN');
-      setIsAdmin(admin); // isAdmin state'ini güncelle
+      setIsAdmin(admin); 
     }
   }, []);
 
@@ -97,15 +52,18 @@ export default function Dashboard() {
     navigate('/login');
   };
 
-  const handleNotificationClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userData = await getUserInfo();
+        setUserInfo(userData);
+      } catch (error) {
+        console.error('Kullanıcı bilgileri alınamadı', error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
-  const handleNotificationClose = () => {
-    setAnchorEl(null);
-  };
-
-  const isNotificationPopoverOpen = Boolean(anchorEl);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -158,8 +116,10 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>{mainListItems}</List>
-        </Drawer>
+          <List>
+              <MainListItems />
+          </List>
+          </Drawer>
         <Box
             component="main"
             sx={{
@@ -185,10 +145,13 @@ export default function Dashboard() {
                       height: 240,
                     }}
                 >
-                  <Chart />
+                 <WelcomeBanner 
+                    userName={userInfo.name} 
+                    hospitalId={userInfo.hospitalId} 
+                    roles={userInfo.roles} 
+                  />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                     sx={{

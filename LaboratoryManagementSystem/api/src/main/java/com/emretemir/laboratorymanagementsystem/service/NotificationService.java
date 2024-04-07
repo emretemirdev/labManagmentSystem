@@ -4,13 +4,18 @@ package com.emretemir.laboratorymanagementsystem.service;
 import com.emretemir.laboratorymanagementsystem.dto.Notification.NotificationDTO;
 import com.emretemir.laboratorymanagementsystem.model.Notification;
 import com.emretemir.laboratorymanagementsystem.repository.NotificationRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Slf4j
 @Service
 public class NotificationService {
 
@@ -41,6 +46,15 @@ public class NotificationService {
         return notificationRepository.findAll().stream()
                 .map(this::convertToNotificationDTO)
                 .collect(Collectors.toList());
+    }
+
+
+    public void deleteAllNotifications() {
+        try {
+            notificationRepository.deleteAll();
+        } catch (Exception e) {
+            throw new ServiceException("Silerken hata oluştu", e);
+        }
     }
 
     private NotificationDTO convertToNotificationDTO(Notification notification) {

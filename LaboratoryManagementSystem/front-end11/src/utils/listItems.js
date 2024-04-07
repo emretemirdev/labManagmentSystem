@@ -1,34 +1,38 @@
-import * as React from 'react';
+import React from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AddIcon from '@mui/icons-material/Add';
 import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
+export const MainListItems = () => {
+  const navigate = useNavigate();
 
-export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <HomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Ana Sayfa" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Rapor Oluştur" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <LogoutIcon />
-      </ListItemIcon>
-      <ListItemText primary="Çıkış Yap" />
-    </ListItemButton>
-  </React.Fragment>
-);
-
-
+  return (
+    <React.Fragment>
+      <ListItemButton onClick={() => navigate('/dashboard')}>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Ana Sayfa" />
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/create-reports')}>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText primary="Rapor Oluştur" />
+      </ListItemButton>
+      <ListItemButton onClick={() => {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }}>
+        <ListItemIcon>
+          <LogoutIcon />
+        </ListItemIcon>
+        <ListItemText primary="Çıkış Yap" />
+      </ListItemButton>
+    </React.Fragment>
+  );
+};

@@ -31,9 +31,7 @@ public class JWTService {
                 .stream()
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .collect(Collectors.toList());
-
         claims.put("roles", roles);
-
         return createToken(claims, userDetails.getUsername());
     }
 

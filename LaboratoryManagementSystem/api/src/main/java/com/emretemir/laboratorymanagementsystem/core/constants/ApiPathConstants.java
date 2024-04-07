@@ -2,6 +2,7 @@ package com.emretemir.laboratorymanagementsystem.core.constants;
 
 public final class ApiPathConstants {
 
+
     private ApiPathConstants() {
         throw new IllegalStateException("Utility class");
     }
@@ -18,12 +19,11 @@ public final class ApiPathConstants {
     //USER CONTROLLER PATHS
 
     public static final String USER_BASE_URL = "/auth";
-
+    public static final String GET_USER_INFO = "/getUserInfo/{userId}";
     public static final String ADD_NEW_USER = "/addNewUser";
     public static final String GENERATE_TOKEN = "/generateToken";
 
     //NOTIFICATION CONTROLLER PATHS
 
     public static final String NOTIFICATION_BASE_URL = "/notification";
-    public static final String GET_ALL_NOTIFICATIONS = "/all";
 }

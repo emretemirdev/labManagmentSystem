@@ -14,7 +14,7 @@ export default function ReportForm() {
     reportDate: '',
   });
 
-  const [reportPic, setReportPic] = useState(null); // Fotoğraf için state eklendi
+  const [reportPic, setReportPic] = useState(null); 
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
@@ -22,7 +22,7 @@ export default function ReportForm() {
     setReport({ ...report, [name]: value });
 };
 const handleFileChange = (e) => {
-  setReportPic(e.target.files[0]); // Fotoğraf dosyasını state'e ekler
+  setReportPic(e.target.files[0]); 
 };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -131,7 +131,7 @@ const handleFileChange = (e) => {
               variant="outlined"
               value={report.diagnosisInfo}
               onChange={handleChange}
-              inputProps={{ maxLength: 200 }} // Maksimum 200 karakter
+              inputProps={{ maxLength: 700 }} // Maksimum 200 karakter
             />
           </Grid>
           <Grid item xs={12}>
