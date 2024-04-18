@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Snackbar, Dialog, DialogActions,TextField, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import { Button, Snackbar, Dialog, DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import Title from '../../utils/Title';
 import { updateReport } from '../../services/reportService';
 
@@ -54,7 +54,7 @@ export default function Reports() {
         }
       };
       const response = await axios.delete(`/report/delete/${reportId}`, config);
-      
+
       fetchReports(); // refresh the list after deletion
     } catch (error) {
       console.error('Delete error:', error);
@@ -69,49 +69,49 @@ export default function Reports() {
       showMessage(errorMessage, "error");
     }
   };
-  
-  
+
+
 
   const handleDeleteConfirmation = (reportId) => {
     const reportToDelete = reports.find(report => report.id === reportId);
     if (!reportToDelete) {
-        console.error('Rapor bulunamadı');
-        return;
+      console.error('Rapor bulunamadı');
+      return;
     }
     const confirmationMessage = `ID: ${reportToDelete.id}'si olan "${reportToDelete.name}" adlı raporu silmek istediğinize emin misiniz?`;
     setDeleteConfirmation({
-        open: true,
-        reportId: reportId,
-        message: confirmationMessage
+      open: true,
+      reportId: reportId,
+      message: confirmationMessage
     });
-};
-
-  
-  
-const handleDeleteConfirmed = async () => {
-  if (deleteConfirmation && deleteConfirmation.open) {
-    await handleDelete(deleteConfirmation.reportId);
-    setDeleteConfirmation(null); // State'i sıfırla
-
-  } else {
-    showMessage('Silme işlemi onaylanmadı', 'error');
-  }
-};
+  };
 
 
 
-const handleDeleteCanceled = () => {
-  if (deleteConfirmation && deleteConfirmation.open) {
+  const handleDeleteConfirmed = async () => {
+    if (deleteConfirmation && deleteConfirmation.open) {
+      await handleDelete(deleteConfirmation.reportId);
+      setDeleteConfirmation(null); // State'i sıfırla
+
+    } else {
+      showMessage('Silme işlemi onaylanmadı', 'error');
+    }
+  };
+
+
+
+  const handleDeleteCanceled = () => {
+    if (deleteConfirmation && deleteConfirmation.open) {
       showMessage('Silme işlemi iptal edildi.');
       setDeleteConfirmation(null); // State'i sıfırla
-  }
-};
+    }
+  };
 
   const handleEditOpen = (report) => {
     setSelectedReport(report);
     setOpenEditDialog(true);
   };
-  
+
   const handleUpdate = async (report) => {
     try {
       const token = localStorage.getItem('token');
@@ -128,15 +128,15 @@ const handleDeleteCanceled = () => {
     }
   };
 
-  
-  
-  
+
+
+
   return (
     <Paper sx={{ margin: 2, padding: 2 }}>
       <Title>Raporlar</Title>
       {message.text && (
         <Snackbar
-           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={Boolean(message.text)}
           autoHideDuration={6000}
           onClose={handleCloseMessage}
@@ -168,35 +168,35 @@ const handleDeleteCanceled = () => {
         </TableBody>
       </Table>
 
-          <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-          <DialogTitle>Raporu Güncelle</DialogTitle>
-          <DialogContent>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                handleUpdate(selectedReport);
-              }}>
-              <TextField
-                label="Ad"
-                value={selectedReport.name}
-                onChange={(e) => setSelectedReport({ ...selectedReport, name: e.target.value })}
-                fullWidth
-              />
-              <TextField
-                label="Tanı Başlığı"
-                value={selectedReport.diagnosisTitle}
-                onChange={(e) => setSelectedReport({ ...selectedReport, diagnosisTitle: e.target.value })}
-                fullWidth
-              />
-              {/* Diğer rapor alanları için benzer giriş alanlarını ekleyebilirsiniz */}
-              <Button type="submit">Güncelle</Button>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenEditDialog(false)}>İptal</Button>
-          </DialogActions>
-        </Dialog>
+      <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
+        <DialogTitle>Raporu Güncelle</DialogTitle>
+        <DialogContent>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            handleUpdate(selectedReport);
+          }}>
+            <TextField
+              label="Ad"
+              value={selectedReport.name}
+              onChange={(e) => setSelectedReport({ ...selectedReport, name: e.target.value })}
+              fullWidth
+            />
+            <TextField
+              label="Tanı Başlığı"
+              value={selectedReport.diagnosisTitle}
+              onChange={(e) => setSelectedReport({ ...selectedReport, diagnosisTitle: e.target.value })}
+              fullWidth
+            />
+            {/* Diğer rapor alanları için benzer giriş alanlarını ekleyebilirsiniz */}
+            <Button type="submit">Güncelle</Button>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenEditDialog(false)}>İptal</Button>
+        </DialogActions>
+      </Dialog>
 
-      
+
       <Dialog open={openDetailsDialog} onClose={handleDetailsClose}>
         <DialogTitle>Rapor Detayları</DialogTitle>
         <DialogContent>
@@ -210,8 +210,8 @@ const handleDeleteCanceled = () => {
           <DialogContentText>Laborant Adı: {selectedReport.laborantName}</DialogContentText>
           <DialogContentText>Laborant Kullanıcı Adı: {selectedReport.laborantUsername}</DialogContentText>
           {selectedReport.reportPic && (
-      <img src={selectedReport.reportPic} alt="Rapor Fotoğrafı" style={{ width: '100%', marginTop: '20px' }} />
-    )}
+            <img src={selectedReport.reportPic} alt="Rapor Fotoğrafı" style={{ width: '100%', marginTop: '20px' }} />
+          )}
 
 
         </DialogContent>
@@ -219,17 +219,17 @@ const handleDeleteCanceled = () => {
           <Button onClick={handleDetailsClose}>Kapat</Button>
         </DialogActions>
       </Dialog>
-  
-  <Dialog open={!!deleteConfirmation?.open} onClose={handleDeleteCanceled}>
-    <DialogTitle>Emin misiniz?</DialogTitle>
-    <DialogContent>
-        <DialogContentText>{deleteConfirmation?.message}</DialogContentText>
-    </DialogContent>
-    <DialogActions>
-        <Button onClick={handleDeleteCanceled}>İptal</Button>
-        <Button onClick={handleDeleteConfirmed}>Sil</Button>
-    </DialogActions>
-</Dialog>
+
+      <Dialog open={!!deleteConfirmation?.open} onClose={handleDeleteCanceled}>
+        <DialogTitle>Emin misiniz?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{deleteConfirmation?.message}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCanceled}>İptal</Button>
+          <Button onClick={handleDeleteConfirmed}>Sil</Button>
+        </DialogActions>
+      </Dialog>
 
     </Paper>
   );

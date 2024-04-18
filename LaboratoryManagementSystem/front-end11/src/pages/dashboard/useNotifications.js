@@ -9,33 +9,33 @@ const useNotifications = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const fetchNotifications = async () => {
-        try {
-            const response = await axios.get('/notification', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setNotifications(response.data.map(notification => ({
-                id: notification.id,
-                createdAt: notification.createdAt,
-                laborantName: notification.laborantName,
-                message: notification.message,
-                notificationType: notification.notificationType,
-                reportId: notification.reportId,
-                reportName: notification.reportName
-              })));
-
-        } catch (err) {
-          if (err.response && err.response.status === 403) {
-            setError('Sadece Yöneticiniz bildirimleri görüntüleyebilir.');
-          } else {
-            setError(`Bildirimler yüklenirken bir hata oluştu: ${err.message}`);
+      try {
+        const response = await axios.get('/notification', {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-        } finally {
-            setLoading(false);
+        });
+        setNotifications(response.data.map(notification => ({
+          id: notification.id,
+          createdAt: notification.createdAt,
+          laborantName: notification.laborantName,
+          message: notification.message,
+          notificationType: notification.notificationType,
+          reportId: notification.reportId,
+          reportName: notification.reportName
+        })));
+
+      } catch (err) {
+        if (err.response && err.response.status === 403) {
+          setError('Sadece Yöneticiniz bildirimleri görüntüleyebilir.');
+        } else {
+          setError(`Bildirimler yüklenirken bir hata oluştu: ${err.message}`);
         }
+      } finally {
+        setLoading(false);
+      }
     };
-    
+
     if (token) {
       fetchNotifications();
     } else {
@@ -50,13 +50,13 @@ const useNotifications = () => {
       await axios.delete('/notification/deleteAll', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setNotifications([]); // Temizle bildirimleri
+      setNotifications([]); 
     } catch (err) {
       setError('Bildirimleri silerken bir hata oluştu.');
     }
   };
 
-  return { notifications, loading, error,deleteAllNotifications  };
+  return { notifications, loading, error, deleteAllNotifications };
 };
 
 export default useNotifications;

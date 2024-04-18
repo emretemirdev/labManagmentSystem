@@ -13,7 +13,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/create-reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
           <Route path="/" element={<Navigate replace to="/login" />} />
         </Routes>
       </Router>
