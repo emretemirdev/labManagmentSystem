@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Snackbar, Dialog, DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import { Button, Snackbar, Dialog, Select, MenuItem ,DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import Title from '../../utils/Title';
 import { updateReport } from '../../services/reportService';
+import ReportSearch from '../../components/views/SearchBox/SearchBox';
+
+
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState({});
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' }); // Mesajlar için tek state
+  const [message, setMessage] = useState({ text: '', type: '' });
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
 
 
@@ -55,7 +58,7 @@ export default function Reports() {
       };
       const response = await axios.delete(`/report/delete/${reportId}`, config);
 
-      fetchReports(); // refresh the list after deletion
+      fetchReports(); 
     } catch (error) {
       console.error('Delete error:', error);
       let errorMessage = 'Rapor silinirken bir hata oluştu';
@@ -122,18 +125,20 @@ export default function Reports() {
       await updateReport(report.id, updatedReportData, token);
       showMessage('Rapor başarıyla güncellendi', 'success');
       fetchReports();
-      setOpenEditDialog(false); // Formu kapat
+      setOpenEditDialog(false); 
     } catch (error) {
       showMessage('Rapor güncellenirken hata oluştu: ' + error.message, 'error');
     }
   };
 
-
-
-
   return (
     <Paper sx={{ margin: 2, padding: 2 }}>
+      
       <Title>Raporlar</Title>
+      
+      <ReportSearch setReports={setReports} showMessage={showMessage} />
+
+
       {message.text && (
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -143,20 +148,25 @@ export default function Reports() {
           message={message.text}
         />
       )}
+    
       <Table size="small">
+
         <TableHead>
           <TableRow>
             <TableCell>Tarih</TableCell>
             <TableCell>Ad</TableCell>
+            <TableCell>SoyAd</TableCell>
             <TableCell>Tanı Başlığı</TableCell>
             <TableCell align="right">İşlemler</TableCell>
           </TableRow>
         </TableHead>
+        
         <TableBody>
           {reports.map((report) => (
             <TableRow key={report.id}>
               <TableCell>{report.reportDate}</TableCell>
               <TableCell>{report.name}</TableCell>
+              <TableCell>{report.surName}</TableCell>
               <TableCell>{report.diagnosisTitle}</TableCell>
               <TableCell align="right">
                 <Button onClick={() => handleDetailsOpen(report)}>Detaylar</Button>
@@ -177,18 +187,35 @@ export default function Reports() {
           }}>
             <TextField
               label="Ad"
-              value={selectedReport.name}
+              value={selectedReport.name || ''}
               onChange={(e) => setSelectedReport({ ...selectedReport, name: e.target.value })}
               fullWidth
+              margin="dense"
+            />
+            <TextField
+              label="SoyAd"
+              value={selectedReport.surName || ''}
+              onChange={(e) => setSelectedReport({ ...selectedReport, surName: e.target.value })}
+              fullWidth
+              margin="dense"
             />
             <TextField
               label="Tanı Başlığı"
-              value={selectedReport.diagnosisTitle}
+              value={selectedReport.diagnosisTitle || ''}
               onChange={(e) => setSelectedReport({ ...selectedReport, diagnosisTitle: e.target.value })}
               fullWidth
+              margin="dense"
             />
-            {/* Diğer rapor alanları için benzer giriş alanlarını ekleyebilirsiniz */}
-            <Button type="submit">Güncelle</Button>
+            <TextField
+              label="Tanı Detayı"
+              multiline
+              rows={4}
+              value={selectedReport.diagnosisInfo || ''}
+              onChange={(e) => setSelectedReport({ ...selectedReport, diagnosisInfo: e.target.value })}
+              fullWidth
+              margin="dense"
+            />
+            <Button type="submit" style={{ marginTop: '20px' }}>Güncelle</Button>
           </form>
         </DialogContent>
         <DialogActions>

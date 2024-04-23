@@ -1,6 +1,8 @@
 package com.emretemir.laboratorymanagementsystem.controller;
 
-import com.emretemir.laboratorymanagementsystem.dto.Report.ReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.UpdateReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.ViewReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.CreateReportDTO;
 import com.emretemir.laboratorymanagementsystem.core.constants.ApiPathConstants;
 import com.emretemir.laboratorymanagementsystem.service.ReportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,11 +19,14 @@ import java.util.List;
 @RequestMapping(ApiPathConstants.REPORT_BASE_URL)
 public class ReportController {
 
-    ReportService reportService;
+    private final ReportService reportService;
+    private final ObjectMapper objectMapper;
 
 
     public ReportController(ReportService reportService) {
+        this.objectMapper = new ObjectMapper();
         this.reportService = reportService;
+
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -32,32 +37,37 @@ public class ReportController {
     }
 
     @GetMapping(ApiPathConstants.GET_ALL_REPORTS)
-    public ResponseEntity<List<ReportDTO>> getAllReportsDTO() {
-        List<ReportDTO> dto = reportService.getAllReports();
+    public ResponseEntity<List<ViewReportDTO>> getAllReportsDTO() {
+        List<ViewReportDTO> dto = reportService.getAllReports();
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping(ApiPathConstants.GET_REPORT_BY_ID)
-    public ResponseEntity<ReportDTO> getReportById(@PathVariable(name = "id") Long id){
-        ReportDTO reportDTO = reportService.getReportById(id);
-        return  ResponseEntity.ok(reportDTO);
+    public ResponseEntity<ViewReportDTO> getReportById(@PathVariable(name = "id") Long id){
+        ViewReportDTO viewReportDTO = reportService.getReportById(id);
+        return  ResponseEntity.ok(viewReportDTO);
     }
 
     @PostMapping(ApiPathConstants.CREATE_REPORT)
-    public ResponseEntity<ReportDTO> createReport(
+    public ResponseEntity<ViewReportDTO> createReport(
             @RequestParam("report") String reportAsJson,
             @RequestParam("reportPic") MultipartFile file) throws JsonProcessingException {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ReportDTO reportDTO = objectMapper.readValue(reportAsJson, ReportDTO.class);
+        CreateReportDTO createReportDTO = objectMapper.readValue(reportAsJson, CreateReportDTO.class);
 
-            ReportDTO createdReportDTO = reportService.createReport(reportDTO, file);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdReportDTO);
+        ViewReportDTO createdViewReportDTO = reportService.createReport(createReportDTO, file);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdViewReportDTO);
     }
 
     @PutMapping(ApiPathConstants.UPDATE_REPORT)
-    public ResponseEntity<ReportDTO> updateReport(@PathVariable Long id, @RequestBody ReportDTO reportDTO) {
-        ReportDTO updatedReportDTO = reportService.updateReport(id, reportDTO);
-        return ResponseEntity.ok(updatedReportDTO);
+    public ResponseEntity<ViewReportDTO> updateReport(@PathVariable Long id, @RequestBody UpdateReportDTO updateReportDTO) {
+        ViewReportDTO updatedViewReportDTO = reportService.updateReport(id, updateReportDTO);
+        return ResponseEntity.ok(updatedViewReportDTO);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ViewReportDTO>> searchReports(@RequestParam(required = false) String query) {
+        List<ViewReportDTO> reports = reportService.searchReports(query);
+        return ResponseEntity.ok(reports);
     }
 
 }

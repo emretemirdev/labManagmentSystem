@@ -1,6 +1,8 @@
 package com.emretemir.laboratorymanagementsystem.service;
 
-import com.emretemir.laboratorymanagementsystem.dto.Report.ReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.CreateReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.UpdateReportDTO;
+import com.emretemir.laboratorymanagementsystem.dto.Report.ViewReportDTO;
 import com.emretemir.laboratorymanagementsystem.model.Report;
 import com.emretemir.laboratorymanagementsystem.model.User;
 import com.emretemir.laboratorymanagementsystem.repository.ReportRepository;
@@ -44,10 +46,7 @@ public class ReportService {
                     () -> new EntityNotFoundException("Kullanıcı bulunamadı, ID: " + report.getUser().getId())
             );
             String laborantName = user.getName();
-
             reportRepository.deleteReportById(id);
-
-
             boolean stillExists = reportRepository.existsById(id);
             if (stillExists) {
                 throw new IllegalStateException("Rapor silinemedi, ID: " + id);
@@ -69,16 +68,16 @@ public class ReportService {
     }
 
 
-    public ReportDTO getReportById(Long id) {
+    public ViewReportDTO getReportById(Long id) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Report not found, ID: " + id));
         return convertToReportDTO(report);
     }
 
     @Transactional
-    public ReportDTO createReport(ReportDTO reportDTO, MultipartFile reportPic) {
-        User user = userService.findById(reportDTO.laborantId()).orElseThrow(
-                () -> new EntityNotFoundException("Kullanıcı bulunamadı, ID: " + reportDTO.laborantId())
+    public ViewReportDTO createReport(CreateReportDTO createReportDTO , MultipartFile reportPic) {
+        User user = userService.findById(createReportDTO.laborantId()).orElseThrow(
+                () -> new EntityNotFoundException("Kullanıcı bulunamadı, ID: " + createReportDTO.laborantId())
         );
 
         String reportPicUrl = null;
@@ -86,14 +85,13 @@ public class ReportService {
             reportPicUrl = storageService.uploadFile(reportPic);
         }
 
-
         Report report = new Report();
-        report.setName(reportDTO.name());
-        report.setSurName(reportDTO.surName());
-        report.setIdentifyNumber(reportDTO.identifyNumber());
-        report.setDiagnosisTitle(reportDTO.diagnosisTitle());
-        report.setDiagnosisInfo(reportDTO.diagnosisInfo());
-        report.setReportDate(reportDTO.reportDate());
+        report.setName(createReportDTO.name());
+        report.setSurName(createReportDTO.surName());
+        report.setIdentifyNumber(createReportDTO.identifyNumber());
+        report.setDiagnosisTitle(createReportDTO.diagnosisTitle());
+        report.setDiagnosisInfo(createReportDTO.diagnosisInfo());
+        report.setReportDate(createReportDTO.reportDate());
         report.setReportPic(reportPicUrl);
         report.setUser(user);
         report = reportRepository.save(report);
@@ -111,21 +109,31 @@ public class ReportService {
     }
 
 
-    public List<ReportDTO> getAllReports() {
+    public List<ViewReportDTO> getAllReports() {
         List<Report> reports = reportRepository.findAll();
         return reports.stream().map(this::convertToReportDTO).collect(Collectors.toList());
     }
 
+    public List<ViewReportDTO> searchReports(String query) {
+        List<Report> reports = reportRepository.searchReports(query);
+        return reports.stream().map(this::convertToReportDTO).collect(Collectors.toList());
+    }
+
     @Transactional
-    public ReportDTO updateReport(Long reportId, ReportDTO reportDTO) {
+    public ViewReportDTO updateReport(Long reportId, UpdateReportDTO updateReportDTO) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new EntityNotFoundException("Report not found with id: " + reportId));
-        updateReportFromDTO(reportDTO, report);
+
+        report.setName(updateReportDTO.name());
+        report.setSurName(updateReportDTO.surName());
+        report.setDiagnosisTitle(updateReportDTO.diagnosisTitle());
+        report.setDiagnosisInfo(updateReportDTO.diagnosisInfo());
         report = reportRepository.save(report);
+
         notificationService.createNotification(
-                "GUNCELLEME",
+                "GÜNCELLEME",
                 report.getId(),
-                "Rapor başarıyla güncellendi: ",
+                "Rapor başarıyla güncellendi: " + report.getName(),
                 report.getUser().getId(),
                 report.getUser().getName(),
                 report.getName()
@@ -134,18 +142,8 @@ public class ReportService {
         return convertToReportDTO(report);
     }
 
-    private void updateReportFromDTO(ReportDTO reportDTO, Report report) {
-        report.setName(reportDTO.name());
-        report.setSurName(reportDTO.surName());
-        report.setIdentifyNumber(reportDTO.identifyNumber());
-        report.setDiagnosisTitle(reportDTO.diagnosisTitle());
-        report.setDiagnosisInfo(reportDTO.diagnosisInfo());
-        report.setReportDate(reportDTO.reportDate());
-        report.setReportPic(reportDTO.reportPic());
-    }
-
-    private ReportDTO convertToReportDTO(Report report) {
-        return new ReportDTO(
+    private ViewReportDTO convertToReportDTO(Report report) {
+        return new ViewReportDTO(
                 report.getId(),
                 report.getName(),
                 report.getSurName(),

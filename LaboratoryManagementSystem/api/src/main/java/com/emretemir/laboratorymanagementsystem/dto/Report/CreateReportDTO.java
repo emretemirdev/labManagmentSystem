@@ -1,7 +1,6 @@
 package com.emretemir.laboratorymanagementsystem.dto.Report;
 
-public record ReportDTO(
-        Long id,
+public record CreateReportDTO(
         String name,
         String surName,
         Long identifyNumber,
@@ -9,7 +8,5 @@ public record ReportDTO(
         String diagnosisInfo,
         String reportDate,
         String reportPic,
-        String laborantName,
-        String laborantUsername,
         Long laborantId
 ) {}

@@ -49,8 +49,8 @@ const NotificationsDropdown = ({ isAdmin }) => {
   };
 
   const handleDeleteAll = () => {
-    deleteAllNotifications(); // Çağır silme işlevini
-    handleClose(); // Kapat popover
+    deleteAllNotifications(); 
+    handleClose(); 
   };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
