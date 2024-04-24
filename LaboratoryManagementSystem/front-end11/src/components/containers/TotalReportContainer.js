@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import TotalReports from '../views/TotalReports/TotalReport'
+import TotalReports from './TotalReport'
 
 const TotalReportsContainer = () => {
   const [totalReportsCount, setTotalReportsCount] = useState(null);
@@ -15,7 +15,7 @@ const TotalReportsContainer = () => {
         setCurrentDate(new Date().toLocaleDateString());
       })
       .catch(error => {
-       setErrorMessage('An error occurred while fetching total reports.');
+       setErrorMessage('Raporlar alınırken bir hata oluştu');
       });
   }, []);
 

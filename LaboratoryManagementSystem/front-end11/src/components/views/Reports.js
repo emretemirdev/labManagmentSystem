@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback  } from 'react';
 import axios from 'axios';
-import { Button, Snackbar, Dialog, Select, MenuItem ,DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
+import { Button, Snackbar, Dialog ,DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material';
 import Title from '../../utils/Title';
 import { updateReport } from '../../services/reportService';
-import ReportSearch from '../../components/views/SearchBox/SearchBox';
+import ReportSearch from '../containers/SearchBox';
 
 
 
@@ -15,11 +15,6 @@ export default function Reports() {
   const [message, setMessage] = useState({ text: '', type: '' });
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
 
-
-  useEffect(() => {
-    fetchReports();
-  }, []);
-
   const showMessage = (text, type = 'error') => {
     setMessage({ text, type });
   };
@@ -28,15 +23,19 @@ export default function Reports() {
     setMessage({ text: '', type: '' });
   };
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     try {
       const response = await axios.get('/report/all');
       setReports(response.data);
     } catch (error) {
       showMessage("Raporlar yüklenirken bir hata oluştu: " + error.message, "error");
     }
-  };
-
+  }, [setReports]); // Include dependencies in the array
+  
+  useEffect(() => {
+    fetchReports();
+  }, [fetchReports]); // Now use the memoized 'fetchReports' function
+  
 
   const handleDetailsOpen = (report) => {
     setSelectedReport(report);
@@ -56,8 +55,7 @@ export default function Reports() {
           Authorization: `Bearer ${token}`
         }
       };
-      const response = await axios.delete(`/report/delete/${reportId}`, config);
-
+      await axios.delete(`/report/delete/${reportId}`, config);
       fetchReports(); 
     } catch (error) {
       console.error('Delete error:', error);
@@ -72,6 +70,7 @@ export default function Reports() {
       showMessage(errorMessage, "error");
     }
   };
+  
 
 
 
@@ -228,7 +227,7 @@ export default function Reports() {
         <DialogTitle>Rapor Detayları</DialogTitle>
         <DialogContent>
           <DialogContentText>Tarih: {selectedReport.reportDate}</DialogContentText>
-          <DialogContentText>Id: {selectedReport.id}</DialogContentText>
+          <DialogContentText>Dosya Numarası: {selectedReport.id}</DialogContentText>
           <DialogContentText>Ad: {selectedReport.name}</DialogContentText>
           <DialogContentText>Soyad: {selectedReport.surName}</DialogContentText>
           <DialogContentText>TC Kimlik No: {selectedReport.identifyNumber}</DialogContentText>

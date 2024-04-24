@@ -1,5 +1,5 @@
 import React from 'react';
-import useNotifications from './useNotifications';
+import useNotifications from '../../services/notificationService';
 import { List, ListItem, ListItemAvatar, ListItemText, Popover, Avatar,Button, Typography,Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';

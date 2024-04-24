@@ -64,7 +64,7 @@ public class ReportController {
         return ResponseEntity.ok(updatedViewReportDTO);
     }
 
-    @GetMapping("/search")
+    @GetMapping(ApiPathConstants.SEARCH_REPORT)
     public ResponseEntity<List<ViewReportDTO>> searchReports(@RequestParam(required = false) String query) {
         List<ViewReportDTO> reports = reportService.searchReports(query);
         return ResponseEntity.ok(reports);

@@ -20,6 +20,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "LOWER(r.surName) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(r.user.name) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(r.user.username) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
-            "LOWER(r.diagnosisTitle) LIKE LOWER(CONCAT('%', :query, '%'))") // Add diagnosis title search
+            "LOWER(r.diagnosisTitle) LIKE LOWER(CONCAT('%', :query, '%'))")
+
     List<Report> searchReports(@Param("query") String query);
 }

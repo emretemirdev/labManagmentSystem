@@ -13,37 +13,27 @@ import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { MainListItems } from '../../utils/listItems';
-import WelcomeBanner from './WelcomeBanner';
-import Reports from './Reports';
-import NotificationsDropdown from './NotificationsDropdown';
+import Reports from '../../components/views/Reports';
+import NotificationsDropdown from '../../components/containers/NotificationsDropdown';
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import jwtDecode from 'jwt-decode';
 import { getUserInfo } from '../../services/userService'; // Kullanıcı servisi import ediliyor
 import AppBar from '../../components/ui/AppBar';
 import Drawer from '../../components/ui/Drawer';
-import CreateReportForm from './CreateReports';
+import CreateReportForm from '../../components/views/CreateReport/CreateReports';
 import TotalReportsContainer from '../../components/containers/TotalReportContainer';
+import WelcomeBanner from '../../components/containers/WelcomeBanner';
+
 
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
   const [open, setOpen] = useState(true);
   const [userInfo, setUserInfo] = useState({});
-  const [isAdmin, setIsAdmin] = useState(false);
   const [showCreateReport, setShowCreateReport] = useState(false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const roles = decodedToken.roles;
-      const admin = roles.includes('ROLE_ADMIN');
-      setIsAdmin(admin);
-    }
-  }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);

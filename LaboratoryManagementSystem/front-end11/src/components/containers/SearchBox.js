@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 function ReportSearch({ setReports, showMessage }) {
   const [searchTerm, setSearchTerm] = useState('');
 
+
   const handleSearch = async () => {
     try {
       const response = await axios.get('/report/search', {
@@ -51,6 +52,7 @@ function ReportSearch({ setReports, showMessage }) {
               ),
             }}
           />
+          
         </Grid>
       </Grid>
     </div>

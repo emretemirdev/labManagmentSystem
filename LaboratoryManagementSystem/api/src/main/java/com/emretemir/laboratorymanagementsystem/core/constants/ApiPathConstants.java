@@ -15,6 +15,7 @@ public final class ApiPathConstants {
     public static final String GET_REPORT_BY_ID = "/{id}";
     public static final String CREATE_REPORT = "/create";
     public static final String UPDATE_REPORT = "/{id}";
+    public static final String SEARCH_REPORT = "/search";
 
     //USER CONTROLLER PATHS
 

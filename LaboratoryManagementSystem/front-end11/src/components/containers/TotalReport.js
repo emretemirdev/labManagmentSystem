@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Paper } from '@mui/material';
-import Title from '../../../utils/Title'
+import Title from '../../utils/Title'
 
 const TotalReports = ({ totalReports, today }) => {
 
