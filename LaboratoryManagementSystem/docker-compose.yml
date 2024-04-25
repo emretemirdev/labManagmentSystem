@@ -12,20 +12,3 @@ services:
     build: ./api # Specify path to your Java app Dockerfile
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/labapp-db
-      SPRING_DATASOURCE_USERNAME: emre
-      SPRING_DATASOURCE_PASSWORD: Emre44
-      CLOUD_AWS_CREDENTIALS_ACCESSKEY: AKIA6GBMBDI36QUDA3UQ
-  
-  # MySQL database service
-  database:
-    image: mysql
-    container_name: labapp-mysql-container
-    environment:
-      MYSQL_ROOT_PASSWORD: root_emre
-      MYSQL_DATABASE: labapp-db
-      MYSQL_USER: emre
-      MYSQL_PASSWORD: Emre44
-    ports:
-      - "3307:3306"
