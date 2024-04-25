@@ -14,6 +14,7 @@ import lombok.Setter;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     Long id;
     @Column(name = "hAdi", length = 25, nullable = false)
     private String name;

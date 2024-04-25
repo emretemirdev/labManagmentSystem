@@ -27,7 +27,6 @@ public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
 
-
     public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService, PasswordEncoder passwordEncoder) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;

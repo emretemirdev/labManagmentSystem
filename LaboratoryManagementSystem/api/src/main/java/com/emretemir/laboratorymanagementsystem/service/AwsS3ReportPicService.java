@@ -6,7 +6,6 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.net.URL;
@@ -39,7 +38,7 @@ public class AwsS3ReportPicService {
                     .key(fileName)
                     .build();
 
-            PutObjectResponse response = s3Client.putObject(putOb, software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes()));
+            s3Client.putObject(putOb, software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes()));
 
             URL url = s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fileName));
             return url.toString();
@@ -47,4 +46,5 @@ public class AwsS3ReportPicService {
             throw new RuntimeException("S3'e dosya yüklenirken hata oluştu", e);
         }
     }
+
 }

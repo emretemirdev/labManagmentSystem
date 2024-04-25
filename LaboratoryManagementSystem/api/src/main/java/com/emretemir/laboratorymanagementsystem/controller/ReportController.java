@@ -30,8 +30,8 @@ public class ReportController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @DeleteMapping( ApiPathConstants.DELETE_REPORT)
-    public ResponseEntity<String> deleteReport(@PathVariable(name = "id") Long id){
+    @DeleteMapping(ApiPathConstants.DELETE_REPORT)
+    public ResponseEntity<String> deleteReport(@PathVariable(name = "id") Long id) {
         String message = reportService.deleteReport(id);
         return ResponseEntity.ok(message);
     }
@@ -43,9 +43,9 @@ public class ReportController {
     }
 
     @GetMapping(ApiPathConstants.GET_REPORT_BY_ID)
-    public ResponseEntity<ViewReportDTO> getReportById(@PathVariable(name = "id") Long id){
+    public ResponseEntity<ViewReportDTO> getReportById(@PathVariable(name = "id") Long id) {
         ViewReportDTO viewReportDTO = reportService.getReportById(id);
-        return  ResponseEntity.ok(viewReportDTO);
+        return ResponseEntity.ok(viewReportDTO);
     }
 
     @PostMapping(ApiPathConstants.CREATE_REPORT)
