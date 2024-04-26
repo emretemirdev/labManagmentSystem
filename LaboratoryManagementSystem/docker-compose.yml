@@ -1,14 +1,12 @@
 version: '3'
 
 services:
-  # Node.js application service
   node-app:
-    build: ./front-end11 # Specify path to your Node.js app Dockerfile
+    build: ./front-end
     ports:
       - "3000:3000"
 
-  # Java application service
   java-app:
-    build: ./api # Specify path to your Java app Dockerfile
+    build: ./api
     ports:
       - "8080:8080"

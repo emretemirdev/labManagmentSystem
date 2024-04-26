@@ -9,7 +9,6 @@ export default function WelcomeBanner({ userName, hospitalId, roles }) {
     if (Array.isArray(roles)) {
       return roles.map((role) => {
         if (role === 'ROLE_USER') return 'LABORANT';
-        // Sunucudan başka roller de dönüyor olabilir. Gerekiyorsa buraya ekleyin.
         return role.replace('ROLE_', '');
       }).join(', ');
     }
@@ -25,7 +24,7 @@ export default function WelcomeBanner({ userName, hospitalId, roles }) {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '100%',
-        height: '190%', // Adjust the height as needed
+        height: '190%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -47,7 +46,7 @@ export default function WelcomeBanner({ userName, hospitalId, roles }) {
       <Box
         sx={{
           position: 'absolute',
-          boxShadow: '0px 0px 2px 1px rgba(0,0,0,0.2)', // Gölgenin rengi ve boyutu
+          boxShadow: '0px 0px 2px 1px rgba(0,0,0,0.2)',
           padding: theme.spacing(1),
           borderRadius: theme.shape.borderRadius,
           top: theme.spacing(3),
@@ -65,7 +64,7 @@ export default function WelcomeBanner({ userName, hospitalId, roles }) {
           position: 'absolute',
           bottom: theme.spacing(8),
           right: theme.spacing(2),
-          boxShadow: '0px 0px 2px 1px rgba(0,0,0,0.2)', // Gölgenin rengi ve boyutu
+          boxShadow: '0px 0px 2px 1px rgba(0,0,0,0.2)',
           padding: theme.spacing(1),
           borderRadius: theme.shape.borderRadius,
 
@@ -84,7 +83,7 @@ export default function WelcomeBanner({ userName, hospitalId, roles }) {
           position: 'absolute',
           bottom: theme.spacing(1),
           right: theme.spacing(2),
-          boxShadow: '0px 0px 2px 1px rgba(0,0,0,0.2)', // Gölgenin rengi ve boyutu
+          boxShadow: '0px 0px 2px 1px rgba(0,0,0,0.2)',
           padding: theme.spacing(1),
           borderRadius: theme.shape.borderRadius,
 
@@ -95,8 +94,6 @@ export default function WelcomeBanner({ userName, hospitalId, roles }) {
           Rolünüz: {formatRoles(roles)}
         </Typography>
       </Box>
-
-
 
     </Paper>
   );
