@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class ReportService {
     private final ReportRepository reportRepository;
     private final UserService userService;

@@ -5,8 +5,7 @@ import TotalReports from './TotalReport'
 const TotalReportsContainer = () => {
   const [totalReportsCount, setTotalReportsCount] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(''); 
-
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     axios.get('/report/all')
@@ -15,7 +14,8 @@ const TotalReportsContainer = () => {
         setCurrentDate(new Date().toLocaleDateString());
       })
       .catch(error => {
-       setErrorMessage('Raporlar alınırken bir hata oluştu');
+        setErrorMessage('Raporlar alınırken bir hata oluştu');
+        console.error('Raporlar alınırken bir hata oluştu', error);
       });
   }, []);
 
@@ -23,7 +23,13 @@ const TotalReportsContainer = () => {
     return <div>Veriler yükleniyor...</div>;
   }
 
-  return <TotalReports totalReports={totalReportsCount} today={currentDate} />;
+  return (
+    <div>
+            {errorMessage && <div>{errorMessage}</div>}
+
+      <TotalReports totalReports={totalReportsCount} today={currentDate} />
+    </div>
+  );
 };
 
 export default TotalReportsContainer;

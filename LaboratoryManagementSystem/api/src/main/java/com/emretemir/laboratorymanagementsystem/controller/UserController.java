@@ -7,7 +7,6 @@ import com.emretemir.laboratorymanagementsystem.model.User;
 import com.emretemir.laboratorymanagementsystem.service.JWTService;
 import com.emretemir.laboratorymanagementsystem.service.UserService;
 import com.emretemir.laboratorymanagementsystem.core.constants.ApiPathConstants;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -20,12 +19,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(ApiPathConstants.USER_BASE_URL)
-@Slf4j
 public class UserController {
 
     private final UserService userService;
