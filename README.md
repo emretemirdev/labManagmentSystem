@@ -24,6 +24,7 @@ Bu uygulama, açık kaynak bir projedir ve GitHub üzerinde herkese açık olara
   - [Docker ile Derleme](#docker-ile-derleme)
   - [Java & Node.js ile Derleme](#java--nodejs-ile-derleme)
 - [Uygulamaya Erişim](#uygulamaya-erişim)
+- [Use Cases](#use-cases)
 - [Katkıda Bulunma](#katkıda-bulunma)
 ---
 
@@ -120,6 +121,66 @@ Laborant olarak giriş yapmak için aşağıdaki bilgileri kullanabilirsiniz:
 kullanıcı adı: test
 şifre: 1234
 ```
+---
+## Use Cases
+
+1. **Kullanıcı Yönetimi:**
+   - **UC-1.1 Kullanıcı Kaydı:**
+     - **Aktör:** Yeni kullanıcı
+     - **Senaryo:** Yeni kullanıcı, sisteme kayıt olmak için gerekli bilgileri (ad, kullanıcı adı, şifre, hastane ID) girer. Sistem, kullanıcı bilgilerini doğrular ve kullanıcıyı veri tabanına kaydeder.
+     - **Alternatif Senaryolar:**
+       - Kullanıcı adı veya hastane ID daha önce kullanılmış ise, sistem bir hata mesajı döndürür.
+       - Şifre belirli güvenlik kriterlerini karşılamıyorsa, sistem bir uyarı mesajı döndürür.
+   
+   - **UC-1.2 Kullanıcı Girişi:**
+     - **Aktör:** Kayıtlı kullanıcı
+     - **Senaryo:** Kullanıcı, kullanıcı adı ve şifresiyle sisteme giriş yapar. Sistem, bilgileri doğrular ve başarılı girişlerde JWT token üretir.
+     - **Alternatif Senaryolar:**
+       - Hatalı kullanıcı adı veya şifre girildiğinde, sistem bir hata mesajı döndürür.
+   
+   - **UC-1.3 Şifre Değiştirme:**
+     - **Aktör:** Kayıtlı kullanıcı
+     - **Senaryo:** Kullanıcı, mevcut şifresini ve yeni şifresini girer. Sistem, mevcut şifreyi doğrular ve yeni şifreyi günceller.
+     - **Alternatif Senaryolar:**
+       - Mevcut şifre yanlış girildiğinde, sistem bir hata mesajı döndürür.
+       - Yeni şifre belirli güvenlik kriterlerini karşılamıyorsa, sistem bir uyarı mesajı döndürür.
+
+2. **Rapor Yönetimi:**
+   - **UC-2.1 Rapor Oluşturma:**
+     - **Aktör:** Laborant
+     - **Senaryo:** Laborant, yeni bir rapor oluşturmak için hasta bilgilerini, tanı bilgilerini, rapor tarihini ve isteğe bağlı olarak rapor resmi ekler. Sistem, raporu veri tabanına kaydeder ve bildirim oluşturur.
+     - **Alternatif Senaryolar:**
+       - Rapor resmi çok büyük ise, sistem resmi yeniden boyutlandırabilir veya bir hata mesajı döndürebilir.
+
+   - **UC-2.2 Rapor Görüntüleme:**
+     - **Aktör:** Laborant, Admin
+     - **Senaryo:** Kullanıcı, belirli bir raporu ID'sine göre veya filtreleme seçeneklerini kullanarak görüntüleyebilir.
+     - **Alternatif Senaryolar:**
+       - Rapor bulunamadığında, sistem bir hata mesajı döndürür.
+
+   - **UC-2.3 Rapor Güncelleme:**
+     - **Aktör:** Laborant
+     - **Senaryo:** Laborant, mevcut bir raporun bilgilerini güncelleyebilir. Sistem, güncellenen raporu kaydeder ve bildirim oluşturur.
+
+   - **UC-2.4 Rapor Silme:**
+     - **Aktör:** Admin
+     - **Senaryo:** Admin, belirli bir raporu ID'sine göre silebilir. Sistem, raporu veri tabanından siler ve bildirim oluşturur.
+     - **Alternatif Senaryolar:**
+       - Rapor bulunamadığında, sistem bir hata mesajı döndürür.
+
+3. **Bildirim Sistemi:**
+   - **UC-3.1 Bildirim Oluşturma:**
+     - **Aktör:** Sistem
+     - **Senaryo:** Rapor oluşturma, güncelleme veya silme işlemi gerçekleştiğinde, sistem bir bildirim oluşturur ve admin kullanıcısına gösterir.
+
+   - **UC-3.2 Bildirim Görüntüleme:**
+     - **Aktör:** Admin
+     - **Senaryo:** Admin, tüm bildirimleri görüntüleyebilir.
+
+   - **UC-3.3 Bildirim Silme:**
+     - **Aktör:** Admin
+     - **Senaryo:** Admin, belirli bir bildirimi veya tüm bildirimleri silebilir.
+
 ---
 
 ## Katkıda Bulunma
