@@ -24,16 +24,41 @@ export default function ReportForm(props) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setReport({ ...report, [name]: value });
+    if (name === "identifyNumber") {
+      const re = /^[0-9\b]+$/; 
+  
+      if (value === '' || re.test(value)) {
+        setReport({ ...report, [name]: value });
+      } else {
+        alert('TC Kimlik Numarası sadece sayılardan oluşmalıdır.');
+      }
+    } else {
+      setReport({ ...report, [name]: value });
+    }
   };
+  
   const handleFileChange = (e) => {
-    setReportPic(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      const maxFileSize = 5 * 1024 * 1024; // 5 MB
+      if (file.size > maxFileSize) {
+        alert('Dosya boyutu 5 MB üstünde olamaz.');
+        return;
+      }
+      setReportPic(file);
+    }
   };
-
+  
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!report.name || !report.surName || !report.identifyNumber || !report.diagnosisTitle || !report.diagnosisInfo || !report.reportDate || !reportPic) {
+      setMessage('Lütfen tüm alanları doldurunuz.');
+      setOpenDialog(true); // Uyarı mesajını dialog olarak göster
+      return; // Eksik bilgi varsa form gönderimini iptal et
+    }
+  
     const token = localStorage.getItem('token');
     if (token) {
       const reportData = { ...report, laborantId: jwtDecode(token).userId }; // jwtDecode ile token'dan kullanıcı ID'sini alıyoruz.
@@ -131,7 +156,7 @@ export default function ReportForm(props) {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+          <TextField
               required
               id="identifyNumber"
               name="identifyNumber"
@@ -140,7 +165,9 @@ export default function ReportForm(props) {
               variant="outlined"
               value={report.identifyNumber}
               onChange={handleChange}
-              inputProps={{ minLength: 11, maxLength: 11 }}
+              error={report.identifyNumber.length > 0 && !/^[0-9\b]+$/.test(report.identifyNumber)}
+              helperText={(report.identifyNumber.length > 0 && !/^[0-9\b]+$/.test(report.identifyNumber)) ? "Sadece rakam giriniz." : ""}
+              inputProps={{ maxLength: 11 }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -195,7 +222,14 @@ export default function ReportForm(props) {
               type="file"
               onChange={handleFileChange}
               fullWidth
+              required
             />
+            <Typography variant="caption" display="block" gutterBottom>
+              Maksimum dosya boyutu: 5 MB
+            </Typography>
+            { !reportPic && <Typography color="error" variant="caption" display="block" gutterBottom>
+              Rapor fotoğrafı zorunludur.
+            </Typography>}
           </Grid>
           <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary">
