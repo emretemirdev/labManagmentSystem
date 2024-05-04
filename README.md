@@ -138,13 +138,6 @@ kullanıcı adı: test
      - **Alternatif Senaryolar:**
        - Hatalı kullanıcı adı veya şifre girildiğinde, sistem bir hata mesajı döndürür.
    
-   - **UC-1.3 Şifre Değiştirme:**
-     - **Aktör:** Kayıtlı kullanıcı
-     - **Senaryo:** Kullanıcı, mevcut şifresini ve yeni şifresini girer. Sistem, mevcut şifreyi doğrular ve yeni şifreyi günceller.
-     - **Alternatif Senaryolar:**
-       - Mevcut şifre yanlış girildiğinde, sistem bir hata mesajı döndürür.
-       - Yeni şifre belirli güvenlik kriterlerini karşılamıyorsa, sistem bir uyarı mesajı döndürür.
-
 2. **Rapor Yönetimi:**
    - **UC-2.1 Rapor Oluşturma:**
      - **Aktör:** Laborant
