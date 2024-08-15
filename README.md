@@ -5,7 +5,7 @@
 
 ## Giriş
 
-Bu proje, basit düzeyde bir laboratuvar raporlama uygulamasıdır. **Spring, JPA, Maven ve React** teknolojilerini kullanarak geliştirilmiş olup, laboratuvar çalışanlarının hastalar üzerinde yapılan testlerin sonuçlarını sistematik bir şekilde kaydetmelerini ve yönetmelerini sağlar.
+Bu proje, başlangıç düzeyinde bir laboratuvar raporlama uygulamasıdır. **Spring, JPA, Maven ve React** teknolojilerini kullanarak geliştirilmiş olup, laboratuvar çalışanlarının hastalar üzerinde yapılan testlerin sonuçlarını sistematik bir şekilde kaydetmelerini ve yönetmelerini sağlar.
 
 Sistem, her bir rapor için hastanın adı, soyadı, kimlik numarası, konulan tanı, tanı detayları ve rapor tarihi gibi bilgileri içeren detaylı bir veritabanı yapısına sahiptir. Ayrıca, laboratuvar çalışanlarının raporları kolayca sıralayabilmeleri, arayabilmeleri ve gerekli güncellemeleri yapabilmeleri için arayüzler sunar.
 
