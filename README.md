@@ -4,7 +4,7 @@
 ---
 
 ## Giriş
-
+ https://github.com/users/omertemir08/emails/334627779/confirm_verification/72b8a97390fd8c4a13634f5a8ec784e76fc86ee1
 Bu proje, başlangıç düzeyinde bir laboratuvar raporlama uygulamasıdır. **Spring, JPA, Maven ve React** teknolojilerini kullanarak geliştirilmiş olup, laboratuvar çalışanlarının hastalar üzerinde yapılan testlerin sonuçlarını sistematik bir şekilde kaydetmelerini ve yönetmelerini sağlar.
 
 Sistem, her bir rapor için hastanın adı, soyadı, kimlik numarası, konulan tanı, tanı detayları ve rapor tarihi gibi bilgileri içeren detaylı bir veritabanı yapısına sahiptir. Ayrıca, laboratuvar çalışanlarının raporları kolayca sıralayabilmeleri, arayabilmeleri ve gerekli güncellemeleri yapabilmeleri için arayüzler sunar.
